@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Obras {
+  id                String              @id @default(uuid()) @db.Uuid
+  nome              String              @db.VarChar(255)
+  endereco          String              @db.VarChar(255)
+  created_at        DateTime            @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime            @default(now()) @updatedAt @db.Timestamptz(6)
+  Despesas          Despesas[]
+  FuncionariosObras FuncionariosObras[]
+
+  @@map("obras")
+}
+
+model Despesas {
+  id         String   @id @default(uuid()) @db.Uuid
+  descricao  String   @db.VarChar(255)
+  valor      Float
+  obrasId    String   @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
+  // Relações com os outros modelos
+  obras Obras @relation(fields: [obrasId], references: [id])
+
+  @@map("despesas")
+}
+
+model Funcionarios {
+  id                String              @id @default(uuid()) @db.Uuid
+  nome              String              @db.VarChar(255)
+  cargo             String              @db.VarChar(255)
+  salario           Float?
+  FuncionariosObras FuncionariosObras[]
+
+  @@map("funcionarios")
+}
+
+model FuncionariosObras {
+  id            String @id @default(uuid()) @db.Uuid
+  funcionarioId String @db.Uuid
+  obrasId       String @db.Uuid
+
+  // Relações com os outros modelos
+  funcionarios Funcionarios @relation(fields: [funcionarioId], references: [id])
+  obras        Obras        @relation(fields: [obrasId], references: [id])
+
+  @@map("funcionarios_obras")
+}
+
+// model Servicos {
+//   id   String @id @default(uuid()) @db.Uuid
+//   nome String @db.VarChar(255)
+
+//   detalhes_obras DetalhesObras[]
+
+//   @@map("servicos")
+// }
+
+// model DetalhesObras {
+//   id            String @id @default(uuid()) @db.Uuid
+//   servicoId     String @db.Uuid
+//   funcionarioId String @db.Uuid
+//   obrasId       String @db.Uuid
+//   valorRecebido Float
+//   valorGasto    Float
+
+//   // Relações com os outros modelos
+//   servicos     Servicos     @relation(fields: [servicoId], references: [id])
+//   funcionarios Funcionarios @relation(fields: [funcionarioId], references: [id])
+//   obras        Obras        @relation(fields: [obrasId], references: [id])
+
+//   @@map("detalhes_obras")
+// }
