@@ -10,7 +10,8 @@ datasource db {
 model Obras {
   id                String              @id @default(uuid()) @db.Uuid
   nome              String              @db.VarChar(255)
-  valor_final       Float
+  construtora       String              @db.VarChar(255)
+  valor_final       String              @db.VarChar(255)
   created_at        DateTime            @default(now()) @db.Timestamptz(6)
   updated_at        DateTime            @default(now()) @updatedAt @db.Timestamptz(6)
   Despesas          Despesas[]
@@ -37,7 +38,6 @@ model Funcionarios {
   id                String              @id @default(uuid()) @db.Uuid
   nome              String              @db.VarChar(255)
   cargo             String              @db.VarChar(255)
-  salario           Float?
   FuncionariosObras FuncionariosObras[]
 
   @@map("funcionarios")

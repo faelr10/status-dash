@@ -1,12 +1,25 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { NewObraDto } from './dto/newObra';
+import { IObraService } from './structure';
+import { ObrasService } from './obras.service';
 
-@Controller('construction')
-export class ConstructionController {
-  //constructor(private readonly constructionService: ConstructionService) {}
+@Controller('obras')
+export class ObrasController {
+  constructor(@Inject(ObrasService) private readonly service: IObraService) {}
 
-  @Post('newObra')
+  @Post()
   async addDespesa(@Body() newObraData: NewObraDto) {
-    return this.constructionService.addDespesa(newObraData);
+    console.log(newObraData);
+    return this.service.newObra(newObraData);
+  }
+
+  @Get()
+  async getDespesas() {
+    return this.service.getObras();
+  }
+
+  @Get(':id')
+  async getDespesaById(@Param('id') id: string) {
+    return this.service.getObraById(id);
   }
 }
