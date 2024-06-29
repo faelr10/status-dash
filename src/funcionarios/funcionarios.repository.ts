@@ -15,4 +15,8 @@ export class FuncionariosRepository implements IFuncionariosRepository {
   newFuncionario(obra: NewFuncionarioDto): Promise<Funcionarios> {
     return this.prisma.funcionarios.create({ data: obra });
   }
+
+  getFuncionarios(): Promise<Funcionarios[]> {
+    return this.prisma.funcionarios.findMany();
+  }
 }

@@ -9,7 +9,9 @@ export class ObrasRepository implements IObraRepository {
   constructor(private prisma: PrismaService) {}
 
   async getObraByName(nome: string): Promise<Obras> {
-    return this.prisma.obras.findFirst({ where: { nome } });
+    return this.prisma.obras.findFirst({
+      where: { nome },
+    });
   }
 
   async newObra(obra: NewObraDto): Promise<Obras> {
@@ -21,6 +23,13 @@ export class ObrasRepository implements IObraRepository {
   }
 
   async getObraById(id: string): Promise<Obras> {
-    return this.prisma.obras.findFirst({ where: { id } });
+    return this.prisma.obras.findFirst({
+      where: { id },
+      include: {
+        DadosObras: {
+          include: { funcionario: true },
+        },
+      },
+    });
   }
 }
