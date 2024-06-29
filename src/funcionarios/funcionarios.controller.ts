@@ -1,6 +1,7 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import { FuncionariosService } from './funcionarios.service';
 import { IFuncionariosService } from './structure';
+import { NewFuncionarioDto } from './dto/newFuncionario.dto';
 
 @Controller('funcionarios')
 export class FuncionariosController {
@@ -11,6 +12,11 @@ export class FuncionariosController {
   @Get()
   async getFuncionarios() {
     return this.service.getFuncionarios();
+  }
+
+  @Post()
+  async createFuncionario(@Body() newFuncionarioData: NewFuncionarioDto) {
+    return this.service.newFuncionario(newFuncionarioData);
   }
 
   //   @Get(':id')

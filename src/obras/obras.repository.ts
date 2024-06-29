@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { IObraRepository } from './structure';
 import { NewObraDto } from './dto/newObra';
-import { Obras, PrismaClient } from '@prisma/client';
+import { DadosObras, Obras, PrismaClient } from '@prisma/client';
+import { NewDetailsObraDto } from './dto/newDetailsObra';
 
 @Injectable()
 export class ObrasRepository implements IObraRepository {
@@ -28,6 +29,17 @@ export class ObrasRepository implements IObraRepository {
         DadosObras: {
           include: { funcionario: true },
         },
+      },
+    });
+  }
+
+  async addDetailsObra(data: NewDetailsObraDto): Promise<DadosObras> {
+    return this.prisma.dadosObras.create({
+      data: {
+        data: new Date(data.data),
+        obra_id: data.obra_id,
+        funcionario_id: data.responsaveis[0].profissional,
+        horas_trabalhadas: data.responsaveis[0].horas,
       },
     });
   }

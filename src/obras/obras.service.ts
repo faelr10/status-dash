@@ -1,8 +1,9 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { IObraRepository, IObraService, ObrasData } from './structure';
 import { NewObraDto } from './dto/newObra';
-import { Obras } from '@prisma/client';
+import { DadosObras, Obras } from '@prisma/client';
 import { ObrasRepository } from './obras.repository';
+import { NewDetailsObraDto } from './dto/newDetailsObra';
 
 @Injectable()
 export class ObrasService implements IObraService {
@@ -85,5 +86,15 @@ export class ObrasService implements IObraService {
     };
 
     return obraData;
+  }
+
+  async addDetailsObra(data: NewDetailsObraDto): Promise<DadosObras> {
+    const obra = await this.repository.getObraById(data.obra_id);
+    if (!obra) {
+      throw new BadRequestException('Obra not found');
+    }
+
+    const newDetailsObra = await this.repository.addDetailsObra(data);
+    return newDetailsObra;
   }
 }
