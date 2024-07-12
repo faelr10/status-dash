@@ -20,9 +20,13 @@ model Obras {
 }
 
 model Funcionarios {
-  id         String       @id @default(uuid()) @db.Uuid
-  nome       String       @db.VarChar(255)
-  cargo      String       @db.VarChar(255)
+  id         String   @id @default(uuid()) @db.Uuid
+  nome       String   @db.VarChar(255)
+  cargo_id   String   @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+  cargo      Cargos   @relation(fields: [cargo_id], references: [id])
+
   DadosObras DadosObras[]
 
   @@map("funcionarios")
@@ -40,4 +44,18 @@ model DadosObras {
   funcionario       Funcionarios @relation(fields: [funcionario_id], references: [id])
 
   @@map("dados_obras")
+}
+
+model Cargos {
+  id           String         @id @default(uuid()) @db.Uuid
+  nome         String         @db.VarChar(255)
+  salario      String         @db.VarChar(255)
+  fgts         String?        @db.VarChar(255)
+  dt_salario   String?        @db.VarChar(255)
+  ferias       String?        @db.VarChar(255)
+  created_at   DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
+  Funcionarios Funcionarios[]
+
+  @@map("cargos")
 }
