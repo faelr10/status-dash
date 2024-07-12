@@ -4,15 +4,15 @@ import { NewDetailsObraDto } from './dto/newDetailsObra';
 
 export type ObrasData = {
   id: string;
-  nome: string;
-  construtora: string;
-  valor_final: string;
-  dados_obra: object[];
+  name: string;
+  construction_company: string;
+  final_value: string;
+  data_obra: any;
 };
 
 export interface IObraService {
   newObra(obra: NewObraDto): Promise<Obras>;
-  getObras(): Promise<ObrasData[]>;
+  getObras(): Promise<Obras[]>;
   getObraById(id: string): Promise<ObrasData | null>;
   addDetailsObra(data: NewDetailsObraDto): Promise<DadosObras>;
 }

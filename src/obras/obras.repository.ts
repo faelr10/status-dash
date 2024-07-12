@@ -27,7 +27,11 @@ export class ObrasRepository implements IObraRepository {
       where: { id },
       include: {
         DadosObras: {
-          include: { funcionario: true },
+          include: {
+            funcionario: {
+              include: { cargo: true },
+            },
+          },
         },
       },
     });

@@ -12,7 +12,12 @@ export class FuncionariosRepository implements IFuncionariosRepository {
   }
 
   newFuncionario(obra: NewFuncionarioDto): Promise<Funcionarios> {
-    return this.prisma.funcionarios.create({ data: obra });
+    return this.prisma.funcionarios.create({
+      data: {
+        nome: obra.nome,
+        cargo_id: obra.cargo,
+      },
+    });
   }
 
   getFuncionarios(): Promise<Funcionarios[]> {

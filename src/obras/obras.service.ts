@@ -4,6 +4,7 @@ import { NewObraDto } from './dto/newObra';
 import { DadosObras, Obras } from '@prisma/client';
 import { ObrasRepository } from './obras.repository';
 import { NewDetailsObraDto } from './dto/newDetailsObra';
+import { CalculatedAllImpostos } from './helpers/CalculatedAllImpostos';
 
 @Injectable()
 export class ObrasService implements IObraService {
@@ -20,35 +21,9 @@ export class ObrasService implements IObraService {
     return newObra;
   }
 
-  async getObras(): Promise<ObrasData[]> {
+  async getObras(): Promise<Obras[]> {
     const obras = await this.repository.getObras();
-    const obrasData: ObrasData[] = [];
-    obras.map((obra) => {
-      obrasData.push({
-        id: obra.id,
-        nome: obra.nome,
-        construtora: obra.construtora,
-        valor_final: obra.valor_final,
-        dados_obra: [
-          {
-            funcao: 'Bombeiro 1',
-            total_horas: '10',
-            gastos_encargos: '3500',
-          },
-          {
-            funcao: 'Auxiliar',
-            total_horas: '20',
-            gastos_encargos: '2000',
-          },
-          {
-            funcao: 'Encarregado',
-            total_horas: '30',
-            gastos_encargos: '7800',
-          },
-        ],
-      });
-    });
-    return obrasData;
+    return obras;
   }
 
   async getObraById(id: string): Promise<ObrasData> {
@@ -56,35 +31,14 @@ export class ObrasService implements IObraService {
     if (!obra) {
       throw new BadRequestException('Obra not found');
     }
-
-    const horasPorCargo = {};
-    obra.DadosObras.forEach((element) => {
-      const cargo = element.funcionario.cargo;
-      const horasTrabalhadas = element.horas_trabalhadas;
-
-      if (!horasPorCargo[cargo]) {
-        horasPorCargo[cargo] = 0;
-      }
-
-      horasPorCargo[cargo] += horasTrabalhadas;
-    });
-
-    const dados_obra = Object.keys(horasPorCargo).map((cargo) => {
-      return {
-        funcao: cargo,
-        total_horas: horasPorCargo[cargo],
-        gastos_encargos: horasPorCargo[cargo] * 20,
-      };
-    });
-
+    const data_obra = await CalculatedAllImpostos(obra);
     const obraData: ObrasData = {
       id: obra.id,
-      nome: obra.nome,
-      construtora: obra.construtora,
-      valor_final: obra.valor_final,
-      dados_obra,
+      name: obra.nome,
+      construction_company: obra.construtora,
+      final_value: obra.valor_final,
+      data_obra,
     };
-
     return obraData;
   }
 
@@ -93,7 +47,6 @@ export class ObrasService implements IObraService {
     if (!obra) {
       throw new BadRequestException('Obra not found');
     }
-
     const newDetailsObra = await this.repository.addDetailsObra(data);
     return newDetailsObra;
   }
