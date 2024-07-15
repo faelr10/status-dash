@@ -15,6 +15,7 @@ model Obras {
   created_at  DateTime     @default(now()) @db.Timestamptz(6)
   updated_at  DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
   DadosObras  DadosObras[]
+  TaxesObra   TaxesObra[]
 
   @@map("obras")
 }
@@ -37,13 +38,26 @@ model DadosObras {
   obra_id           String       @db.Uuid
   funcionario_id    String       @db.Uuid
   horas_trabalhadas Int          @db.Integer
-  data              DateTime     @db.Timestamptz(6)
+  date              DateTime     @db.Timestamptz(6)
   created_at        DateTime     @default(now()) @db.Timestamptz(6)
   updated_at        DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
   obra              Obras        @relation(fields: [obra_id], references: [id])
   funcionario       Funcionarios @relation(fields: [funcionario_id], references: [id])
 
   @@map("dados_obras")
+}
+
+model TaxesObra {
+  id         String   @id @default(uuid()) @db.Uuid
+  obra_id    String   @db.Uuid
+  name       String   @db.VarChar(255)
+  value      String   @db.VarChar(255)
+  date       DateTime @db.Timestamptz(6)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+  obra       Obras    @relation(fields: [obra_id], references: [id])
+
+  @@map("taxes_obras")
 }
 
 model Cargos {

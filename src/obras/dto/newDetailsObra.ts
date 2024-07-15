@@ -2,7 +2,7 @@ import { IsArray, IsString } from 'class-validator';
 
 export class NewDetailsObraDto {
   @IsString()
-  data: string;
+  date: string;
 
   @IsString()
   obra_id: string;

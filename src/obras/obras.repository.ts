@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { IObraRepository } from './structure';
+import { IObraRepository, TaxesData } from './structure';
 import { NewObraDto } from './dto/newObra';
-import { DadosObras, Obras, PrismaClient } from '@prisma/client';
+import { DadosObras, Obras, PrismaClient, TaxesObra } from '@prisma/client';
 import { NewDetailsObraDto } from './dto/newDetailsObra';
 
 @Injectable()
@@ -33,6 +33,7 @@ export class ObrasRepository implements IObraRepository {
             },
           },
         },
+        TaxesObra: true,
       },
     });
   }
@@ -40,10 +41,21 @@ export class ObrasRepository implements IObraRepository {
   async addDetailsObra(data: NewDetailsObraDto): Promise<DadosObras> {
     return this.prisma.dadosObras.create({
       data: {
-        data: new Date(data.data),
+        date: new Date(data.date),
         obra_id: data.obra_id,
         funcionario_id: data.responsaveis[0].profissional,
         horas_trabalhadas: data.responsaveis[0].horas,
+      },
+    });
+  }
+
+  async registerTaxe(data: TaxesData): Promise<TaxesObra> {
+    return this.prisma.taxesObra.create({
+      data: {
+        name: data.name,
+        date: new Date(data.date),
+        obra_id: data.obra_id,
+        value: data.value,
       },
     });
   }

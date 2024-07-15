@@ -1,14 +1,15 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { IObraRepository, IObraService, ObrasData } from './structure';
-import { NewObraDto } from './dto/newObra';
+import { TaxesService } from 'src/impostos/taxes.service';
+import { IObraRepository, IObraService, ObrasData } from '../structure';
+import { NewObraDto } from '../dto/newObra';
 import { DadosObras, Obras } from '@prisma/client';
-import { ObrasRepository } from './obras.repository';
-import { NewDetailsObraDto } from './dto/newDetailsObra';
-import { CalculatedAllImpostos } from './helpers/CalculatedAllImpostos';
+import { NewDetailsObraDto } from '../dto/newDetailsObra';
+import { ObrasRepository } from '../obras.repository';
 
 @Injectable()
 export class ObrasService implements IObraService {
   constructor(
+    private readonly taxesService: TaxesService,
     @Inject(ObrasRepository) private readonly repository: IObraRepository,
   ) {}
 
@@ -31,12 +32,13 @@ export class ObrasService implements IObraService {
     if (!obra) {
       throw new BadRequestException('Obra not found');
     }
-    const data_obra = await CalculatedAllImpostos(obra);
+    const data_obra = await this.taxesService.CalculatedAllImpostos(obra);
     const obraData: ObrasData = {
       id: obra.id,
       name: obra.nome,
       construction_company: obra.construtora,
       final_value: obra.valor_final,
+      taxes_obra: obra.TaxesObra,
       data_obra,
     };
     return obraData;
