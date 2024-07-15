@@ -98,47 +98,47 @@ export class TaxesService {
     return data_obra;
   }
 
-  private calculatedBasicFoodBasket(hours: number): number {
+  public calculatedBasicFoodBasket(hours: number): number {
     return Number(((hours * 164.9) / 220).toFixed(2));
   }
 
-  private calculatedCoffeDailly(hours: number): number {
+  public calculatedCoffeDailly(hours: number): number {
     return Number(((hours / 8) * 4.5).toFixed(2));
   }
 
-  private calculatedTransport(hours: number): number {
+  public calculatedTransport(hours: number): number {
     return Number(((hours / 8) * 12.5).toFixed(2));
   }
 
-  private calculatedSalary(salaryFull: number, hours: number): number {
+  public calculatedSalary(salaryFull: number, hours: number): number {
     return Number(((salaryFull / 220) * hours).toFixed(2));
   }
 
-  private calculatedFgts(value: number): number {
+  public calculatedFgts(value: number): number {
     return Number((value * 0.08).toFixed(2));
   }
 
-  private calculated13(value: number): number {
+  public calculated13(value: number): number {
     return Number((value * 0.0833).toFixed(2));
   }
 
-  private calculatedFgts13(value: number): number {
+  public calculatedFgts13(value: number): number {
     return Number((value * 0.08).toFixed(2));
   }
 
-  private calculatedVacation(value: number): number {
+  public calculatedVacation(value: number): number {
     return Number((value * 0.0833).toFixed(2));
   }
 
-  private calculatedVacationOneThird(value: number): number {
+  public calculatedVacationOneThird(value: number): number {
     return Number((value * 0.33).toFixed(2));
   }
 
-  private calculatedFineDismissal(value: number): number {
+  public calculatedFineDismissal(value: number): number {
     return Number((value * 0.5).toFixed(2));
   }
 
-  private calculatedBDI(value: number): number {
+  public calculatedBDI(value: number): number {
     return Number((value * 0.2).toFixed(2));
   }
 }
