@@ -1,5 +1,5 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { TaxesService } from 'src/impostos/taxes.service';
+import { TaxesService } from '../../impostos/taxes.service';
 import { IObraRepository, IObraService, ObrasData } from '../structure';
 import { NewObraDto } from '../dto/newObra';
 import { DadosObras, Obras } from '@prisma/client';
