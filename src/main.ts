@@ -7,7 +7,7 @@ async function bootstrap() {
 
   // Configuração específica de CORS para permitir requisições do frontend
   app.enableCors({
-    origin: 'https://front-status-dash.vercel.app',
+    origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
