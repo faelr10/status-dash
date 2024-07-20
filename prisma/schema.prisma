@@ -8,74 +8,80 @@ datasource db {
 }
 
 model Obras {
-  id                String              @id @default(uuid()) @db.Uuid
-  nome              String              @db.VarChar(255)
-  construtora       String              @db.VarChar(255)
-  valor_final       String              @db.VarChar(255)
-  created_at        DateTime            @default(now()) @db.Timestamptz(6)
-  updated_at        DateTime            @default(now()) @updatedAt @db.Timestamptz(6)
-  Despesas          Despesas[]
-  FuncionariosObras FuncionariosObras[]
+  id          String       @id @default(uuid()) @db.Uuid
+  nome        String       @db.VarChar(255)
+  construtora String       @db.VarChar(255)
+  valor_final String       @db.VarChar(255)
+  created_at  DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
+  DadosObras  DadosObras[]
+  TaxesObra   TaxesObra[]
 
   @@map("obras")
 }
 
-model Despesas {
+model Funcionarios {
   id         String   @id @default(uuid()) @db.Uuid
-  descricao  String   @db.VarChar(255)
-  valor      Float
-  obrasId    String   @db.Uuid
+  nome       String   @db.VarChar(255)
+  cargo_id   String   @db.Uuid
   created_at DateTime @default(now()) @db.Timestamptz(6)
   updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+  cargo      Cargos   @relation(fields: [cargo_id], references: [id])
 
-  // Relações com os outros modelos
-  obras Obras @relation(fields: [obrasId], references: [id])
-
-  @@map("despesas")
-}
-
-model Funcionarios {
-  id                String              @id @default(uuid()) @db.Uuid
-  nome              String              @db.VarChar(255)
-  cargo             String              @db.VarChar(255)
-  FuncionariosObras FuncionariosObras[]
+  DadosObras DadosObras[]
 
   @@map("funcionarios")
 }
 
-model FuncionariosObras {
-  id            String @id @default(uuid()) @db.Uuid
-  funcionarioId String @db.Uuid
-  obrasId       String @db.Uuid
+model DadosObras {
+  id                String       @id @default(uuid()) @db.Uuid
+  obra_id           String       @db.Uuid
+  funcionario_id    String       @db.Uuid
+  horas_trabalhadas Int          @db.Integer
+  date              DateTime     @db.Timestamptz(6)
+  created_at        DateTime     @default(now()) @db.Timestamptz(6)
+  updated_at        DateTime     @default(now()) @updatedAt @db.Timestamptz(6)
+  obra              Obras        @relation(fields: [obra_id], references: [id])
+  funcionario       Funcionarios @relation(fields: [funcionario_id], references: [id])
 
-  // Relações com os outros modelos
-  funcionarios Funcionarios @relation(fields: [funcionarioId], references: [id])
-  obras        Obras        @relation(fields: [obrasId], references: [id])
-
-  @@map("funcionarios_obras")
+  @@map("dados_obras")
 }
 
-// model Servicos {
-//   id   String @id @default(uuid()) @db.Uuid
-//   nome String @db.VarChar(255)
+model TaxesObra {
+  id         String   @id @default(uuid()) @db.Uuid
+  obra_id    String   @db.Uuid
+  name       String   @db.VarChar(255)
+  value      String   @db.VarChar(255)
+  date       DateTime @db.Timestamptz(6)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+  obra       Obras    @relation(fields: [obra_id], references: [id])
 
-//   detalhes_obras DetalhesObras[]
+  @@map("taxes_obras")
+}
 
-//   @@map("servicos")
-// }
+model Cargos {
+  id           String         @id @default(uuid()) @db.Uuid
+  nome         String         @db.VarChar(255)
+  salario      String         @db.VarChar(255)
+  fgts         String?        @db.VarChar(255)
+  dt_salario   String?        @db.VarChar(255)
+  ferias       String?        @db.VarChar(255)
+  created_at   DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
+  Funcionarios Funcionarios[]
 
-// model DetalhesObras {
-//   id            String @id @default(uuid()) @db.Uuid
-//   servicoId     String @db.Uuid
-//   funcionarioId String @db.Uuid
-//   obrasId       String @db.Uuid
-//   valorRecebido Float
-//   valorGasto    Float
+  @@map("cargos")
+}
 
-//   // Relações com os outros modelos
-//   servicos     Servicos     @relation(fields: [servicoId], references: [id])
-//   funcionarios Funcionarios @relation(fields: [funcionarioId], references: [id])
-//   obras        Obras        @relation(fields: [obrasId], references: [id])
+model Users {
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(255)
+  email      String   @db.VarChar(255)
+  password   String   @db.VarChar(255)
+  is_admin   Boolean  @default(false)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
 
-//   @@map("detalhes_obras")
-// }
+  @@map("users")
+}

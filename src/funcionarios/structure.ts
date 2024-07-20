@@ -3,6 +3,7 @@ import { NewFuncionarioDto } from './dto/newFuncionario.dto';
 
 export interface IFuncionariosService {
   newFuncionario(data: NewFuncionarioDto): Promise<Funcionarios>;
+  getFuncionarios(): Promise<Funcionarios[]>;
   //   getObras(): Promise<Obras[]>;
   //   getObraById(id: string): Promise<Obras | null>;
 }
@@ -10,6 +11,8 @@ export interface IFuncionariosService {
 export interface IFuncionariosRepository {
   getFuncionarioByName(nome: string): Promise<Funcionarios | null>;
   newFuncionario(obra: NewFuncionarioDto): Promise<Funcionarios>;
+  getFuncionarios(): Promise<Funcionarios[]>;
+
   //   getObras(): Promise<Obras[]>;
   //   getObraById(id: string): Promise<Obras | null>;
 }

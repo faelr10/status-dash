@@ -21,4 +21,8 @@ export class FuncionariosService implements IFuncionariosService {
     const newObra = await this.repository.newFuncionario(data);
     return newObra;
   }
+
+  async getFuncionarios(): Promise<Funcionarios[]> {
+    return this.repository.getFuncionarios();
+  }
 }
